@@ -8,9 +8,7 @@ env/
 # 排除原始数据和特征提取结果，避免 GitHub 仓库过大
 data/Feats/*.joblib
 data/Models/*.joblib
-data/full_sequences.csv
-outputs
-tests
+
 
 # --- Python 缓存与编译文件 ---
 __pycache__/
