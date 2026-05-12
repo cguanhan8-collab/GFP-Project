@@ -6,13 +6,13 @@
 该数据集字典包含以下五个核心键值对：
 键名 (Key)，数据类型 (Type)
 X，float32        模型提取"data\full_sequences.csv"的数据。特征向量矩阵。
-Y，float32        回归目标。荧光亮度值。
+Y，float32        回归目标。荧光亮度值，就用原始数据，不要取对数！
 seqs，int8        溯源矩阵。氨基酸序列的整数编码。如果长度不一致，以最长序列为准，短序列末尾用 0 填充
 metadata，dict    元数据。包含提取日期、模型版本、层数信息。
 
 .joblib 格式的 NumPy 矩阵命名规则
 GFP_Feat_[模型]_[作者]_[日期YYMMDD]_v[序号].joblib
-例如：GFP_Feat_ESM2t30_5k_CGH_260512_v1.joblib
+例如：data\Feats\GFP_Feat_ESM2t30_5k_CGH_260512_v1.joblib
 所有提取后的 .joblib 文件统一存放在项目根目录下的：
 data\Feats\
 
@@ -30,4 +30,24 @@ seqs，int8，溯源矩阵，氨基酸序列的整数编码方法：{
     'M': 11, 'N': 12, 'P': 13, 'Q': 14, 'R': 15, 'S': 16, 'T': 17, 'V': 18, 'W': 19, 'Y': 20
 }
 
-核心任务2：
+核心任务2：使用随机森林或者神经网络训练预测模型
+神经网络建议统一使用 PyTorch，随机森林使用 scikit-learn。
+注意，上一步得到的特征维度在不同模型之间有差别，可能是640，也可能是其他的，所以这个代码不一定可以通用。
+
+固定种子：
+train_test_split(..., random_state=42)
+神经网络权重初始化：torch.manual_seed(42)
+随机森林：RandomForestRegressor(random_state=42)
+
+
+所有模型输出应存放在 data\models\ 文件夹下，命名遵循：GFP_[拟合模型（如 RF, MLP, XGB）]_[嵌入模型（任务1那个）]_[作者]_[日期YYMMDD]_v[序号].joblib
+例如：data\Models\GFP_RF_ESM2t30_CGH_260512_v1.joblib
+
+分区键名 (Key),包含内容,目的
+model,      拟合后的模型！！！
+metrics,    模型性能
+params,     训练时的参数（如 max_depth, lr, batch_size）。
+provenance, 随机种子、特征维度、原始数据集版本、采样数量（5000）。,血统：记录数据来源，确保全队数据对齐。
+metadata,   训练日期、耗时、设备、Python/库版本。
+
+次要任务3：测评第二步的亮度打分模型，输出R^2
