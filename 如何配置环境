@@ -1,0 +1,21 @@
+🛠️ 环境配置三步走
+在项目文件夹打开终端（cmd 或 PowerShell），输入：
+py -3.10 --version
+检查有没有下载Python 3.10.x
+
+第一步：创建虚拟环境（防止搞乱你电脑的其他项目）
+在项目文件夹打开终端（cmd 或 PowerShell），输入：
+py -3.10 -m venv venv
+
+第二步：激活环境
+在项目文件夹打开终端（cmd 或 PowerShell），输入：
+Windows: .\venv\Scripts\activate
+Mac/Linux: source venv/bin/activate
+此时终端路径前面有绿色的(venv)，说明已经进入环境
+
+第三步：一键安装所有依赖
+在项目文件夹打开终端（cmd 或 PowerShell），输入：
+python -m pip install --upgrade pip setuptools wheel ; python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+这一步不要开梯子，因为使用清华源
+
+如果报错就把代码发给ai

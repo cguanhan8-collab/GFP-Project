@@ -1,0 +1,33 @@
+"data\full_sequences.csv"保存的是 荧光亮度和氨基酸序列，算是原始数据
+
+核心任务1：使用 esm2_t30_150M_UR50D 模型提取"data\full_sequences.csv"的数据。
+
+输出格式：.joblib 格式的 NumPy 矩阵。
+该数据集字典包含以下五个核心键值对：
+键名 (Key)，数据类型 (Type)
+X，float32        模型提取"data\full_sequences.csv"的数据。特征向量矩阵。
+Y，float32        回归目标。荧光亮度值。
+seqs，int8        溯源矩阵。氨基酸序列的整数编码。如果长度不一致，以最长序列为准，短序列末尾用 0 填充
+metadata，dict    元数据。包含提取日期、模型版本、层数信息。
+
+.joblib 格式的 NumPy 矩阵命名规则
+GFP_Feat_[模型]_[作者]_[日期YYMMDD]_v[序号].joblib
+例如：GFP_Feat_ESM2t30_5k_CGH_260512_v1.joblib
+所有提取后的 .joblib 文件统一存放在项目根目录下的：
+data\Feats\
+
+注意，只需要处理5000个样本，不要全部处理
+为了确保全队在后续调参时使用的是同一组数据，建议使用相同采样方式。
+方案：使用固定的随机种子（random_state=42）
+举例：
+import pandas as pd
+df_all = pd.read_csv(r"data\full_sequences.csv")
+df = df_all.sample(n=5000, random_state=42).reset_index(drop=True)
+print(f"首条序列预览: {df['full_sequence'].iloc[0][:10]}...") 
+
+seqs，int8，溯源矩阵，氨基酸序列的整数编码方法：{
+    'A': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'K': 9, 'L': 10,
+    'M': 11, 'N': 12, 'P': 13, 'Q': 14, 'R': 15, 'S': 16, 'T': 17, 'V': 18, 'W': 19, 'Y': 20
+}
+
+核心任务2：
