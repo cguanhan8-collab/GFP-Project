@@ -7,7 +7,10 @@ env/
 # --- 数据与大型文件 ---
 # 排除原始数据和特征提取结果，避免 GitHub 仓库过大
 data/Feats/*.joblib
-data/Models/*.joblib
+data/Models
+data/Exclusion_List.csv
+data/GFP_data.xlsx
+data/submission_template.csv
 
 
 # --- Python 缓存与编译文件 ---
